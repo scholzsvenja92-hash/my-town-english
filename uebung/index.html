@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Town: Üben</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<style>
+  :root { --ink:#2A1B3D; --orange:#EE7D1C; --os:#FDE7CF; --lila:#7A4FC4; --ls:#E9E0F7; --creme:#FFF8EE; --gruen:#3E8E6B; --gs:#DFF1E7; --grau:#6B6478; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { margin:0; padding:0; }
+  body { background:var(--creme); color:var(--ink); font-family:Verdana, Arial, Helvetica, sans-serif; line-height:1.5; font-size:20px; -webkit-user-select:none; user-select:none; touch-action:manipulation; }
+  .wrap { max-width:980px; margin:0 auto; padding:18px 18px 40px; }
+  h1, h2 { font-family:"Arial Black","Helvetica Neue",Arial,sans-serif; font-weight:900; line-height:1.1; margin:0; }
+  h1 { font-size:clamp(34px,7vw,56px); }
+  h2 { font-size:clamp(26px,5vw,36px); }
+  .chip { display:inline-block; font-size:13px; font-weight:bold; letter-spacing:.06em; text-transform:uppercase; border:2px solid var(--orange); color:#B8560A; border-radius:999px; padding:3px 14px; background:#fff; }
+  .bar { width:90px; height:8px; background:var(--orange); border-radius:4px; margin:12px 0 18px; }
+  button { font:inherit; cursor:pointer; color:var(--ink); }
+  .btn { min-height:60px; padding:12px 26px; border-radius:16px; border:2.5px solid var(--ink); background:#fff; font-weight:bold; font-size:20px; }
+  .btn.pri { background:var(--ink); color:#fff; }
+  .btn:active { transform:scale(.97); }
+  .btn:focus-visible, .tile:focus-visible, .opt:focus-visible, .m:focus-visible { outline:4px solid var(--lila); outline-offset:3px; }
+  .menu { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:8px; }
+  .menu .m { text-align:left; border:2.5px solid var(--ink); border-radius:20px; background:var(--os); padding:18px 20px; min-height:120px; display:grid; grid-template-columns:84px 1fr; gap:16px; align-items:center; }
+  .menu .m:nth-child(even) { background:var(--ls); }
+  .menu .m img { width:84px; height:84px; object-fit:cover; border-radius:14px; border:2px solid var(--ink); background:#fff; }
+  .menu .m b { display:block; font-size:22px; }
+  .menu .m span { font-size:16px; color:var(--grau); }
+  .top { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:14px; }
+  .top .stand { margin-left:auto; font-weight:bold; font-size:18px; color:#B8560A; }
+  .hint { color:var(--grau); font-size:17px; margin:0 0 14px; }
+  .done { display:none; text-align:center; background:#fff; border:3px solid var(--orange); border-radius:24px; padding:26px 20px; margin-top:20px; }
+  .done.zeigen { display:block; }
+  .done .lob { font-family:"Arial Black",Arial,sans-serif; font-size:40px; margin-bottom:14px; }
+  .done .btn { margin:4px; }
+  /* match */
+  .mcols { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .mcols h3 { margin:0 0 8px; font-size:16px; letter-spacing:.06em; text-transform:uppercase; color:var(--grau); }
+  .mcol { display:grid; gap:12px; }
+  .tile { border:2.5px solid var(--ink); border-radius:18px; background:#fff; min-height:112px; display:flex; align-items:center; justify-content:center; padding:8px; font-weight:bold; font-size:22px; }
+  .tile img { width:100%; max-width:200px; height:96px; object-fit:contain; }
+  .tile.sel { background:var(--ls); border-color:var(--lila); box-shadow:0 0 0 4px var(--lila) inset; }
+  .tile.ok { background:var(--gs); border-color:var(--gruen); color:var(--gruen); pointer-events:none; }
+  .falsch { animation:wackel .35s; background:#FDE3DB !important; }
+  @keyframes wackel { 25% { transform:translateX(-7px); } 75% { transform:translateX(7px); } }
+  /* spell */
+  .sbild { display:flex; justify-content:center; }
+  .sbild img { width:min(80vw,340px); height:min(56vw,230px); object-fit:contain; background:#fff; border:2.5px solid var(--ink); border-radius:24px; padding:10px; }
+  .slots { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:20px 0; min-height:64px; }
+  .slot { width:46px; height:60px; border:2.5px solid var(--ink); border-radius:12px; background:var(--os); font-family:"Arial Black",Arial,sans-serif; font-size:30px; display:flex; align-items:center; justify-content:center; }
+  .slot.leer { border:none; background:none; width:22px; }
+  .slot.voll { background:#fff; }
+  .slot.ok { background:var(--gs); border-color:var(--gruen); }
+  .tl-wrap { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .tl { width:60px; height:68px; border:2.5px solid var(--ink); border-radius:14px; background:#fff; font-family:"Arial Black",Arial,sans-serif; font-size:30px; }
+  .tl.weg { visibility:hidden; }
+  .sbtns { display:flex; gap:12px; justify-content:center; margin-top:18px; flex-wrap:wrap; }
+  /* listen */
+  .lopts { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:16px; }
+  .opt { border:2.5px solid var(--ink); border-radius:20px; background:#fff; min-height:150px; display:flex; align-items:center; justify-content:center; padding:8px; }
+  .opt img { width:100%; height:130px; object-fit:contain; }
+  .opt.ok { background:var(--gs); border-color:var(--gruen); }
+  .center { text-align:center; }
+  .big { font-family:"Arial Black",Arial,sans-serif; font-size:clamp(40px,10vw,76px); line-height:1.05; word-break:break-word; }
+  /* weg */
+  .wwrap { display:grid; grid-template-columns:minmax(0,560px) 1fr; gap:22px; align-items:start; }
+  .karte { position:relative; width:100%; aspect-ratio:1; background:#fff; border:3px solid var(--ink); border-radius:24px; overflow:hidden; }
+  .karte svg.str { position:absolute; inset:0; width:100%; height:100%; }
+  .ort { position:absolute; width:19%; aspect-ratio:1; transform:translate(-50%,-50%); border:2.5px solid var(--ink); border-radius:50%; background:#fff; overflow:hidden; }
+  .ort img { width:100%; height:100%; object-fit:cover; display:block; }
+  .ort.ziel { box-shadow:0 0 0 5px var(--orange); }
+  .start { position:absolute; width:9%; aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; background:var(--lila); color:#fff; font-size:12px; font-weight:bold; display:flex; align-items:center; justify-content:center; }
+  .fig { position:absolute; width:13%; aspect-ratio:1; transform:translate(-50%,-50%); transition:left .35s ease, top .35s ease; z-index:3; }
+  .fig svg { width:100%; height:100%; transition:transform .25s ease; filter:drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+  .wside { display:grid; gap:14px; }
+  .auftrag { border:2.5px solid var(--ink); border-radius:20px; background:var(--os); padding:14px 18px; display:grid; grid-template-columns:96px 1fr; gap:14px; align-items:center; }
+  .auftrag img { width:96px; height:80px; object-fit:contain; background:#fff; border:2px solid var(--ink); border-radius:12px; }
+  .auftrag b { font-size:22px; display:block; }
+  .cmd { display:grid; gap:10px; }
+  .cmd .btn { display:flex; align-items:center; gap:14px; text-align:left; min-height:68px; background:#fff; }
+  .cmd .btn svg { width:40px; height:40px; flex:none; }
+  .cmd .btn:nth-child(1) { background:var(--ls); } .cmd .btn:nth-child(2) { background:var(--os); } .cmd .btn:nth-child(3) { background:var(--gs); }
+  /* bingo */
+  .bcard { background:#fff; border:3px solid var(--ink); border-radius:26px; padding:22px; text-align:center; min-height:380px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
+  .bcard img { width:min(80vw,340px); height:min(50vw,220px); object-fit:contain; }
+  .gerufen { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+  .gerufen span { background:var(--os); border:2px solid var(--orange); border-radius:999px; padding:4px 14px; font-weight:bold; font-size:16px; }
+  [hidden] { display:none !important; }
+  .nospeech { background:#fff; border:2px dashed var(--orange); border-radius:14px; padding:10px 14px; font-size:16px; margin:0 0 14px; }
+  @media (max-width:760px) {
+    body { font-size:18px; }
+    .mcols { gap:12px; }
+    .wwrap { grid-template-columns:1fr; }
+  }
+  @media (prefers-reduced-motion:reduce) { .falsch { animation:none; } .fig, .fig svg { transition:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Start -->
+  <section id="home">
+    <span class="chip">English · Klasse 7</span>
+    <h1 style="margin-top:14px">My Town</h1>
+    <div class="bar"></div>
+    <p class="hint">Tippe auf eine Aufgabe. Du kannst nichts falsch machen. Probiere es einfach noch einmal.</p>
+    <div class="menu">
+      <button class="m" data-go="match"><img src="img/town.png" alt=""><div><b>Match the pairs</b><span>Tippe ein Bild und dann das passende Wort.</span></div></button>
+      <button class="m" data-go="spell"><img src="img/cinema.png" alt=""><div><b>Spell the word</b><span>Tippe die Buchstaben in der richtigen Reihenfolge.</span></div></button>
+      <button class="m" data-go="listen" id="menuListen"><img src="img/bus.png" alt=""><div><b>Listen and guess</b><span>Hör das Wort und tippe das richtige Bild.</span></div></button>
+      <button class="m" data-go="way"><img src="img/street-photo.png" alt=""><div><b>Find the way</b><span>Führe die Figur mit Go straight on, Turn left, Turn right.</span></div></button>
+    </div>
+    <p style="margin-top:26px"><button class="btn" data-go="bingo">Bingo-Zieher für die Lehrkraft</button></p>
+  </section>
+
+  <!-- Match -->
+  <section id="match" hidden>
+    <div class="top"><button class="btn" data-go="home">Menü</button><h2>Match the pairs</h2><span class="stand" id="matchStand"></span></div>
+    <p class="hint">Tippe ein Bild und dann das passende Wort.</p>
+    <div class="mcols"><div><h3>Bild</h3><div class="mcol" id="matchBilder"></div></div><div><h3>Wort</h3><div class="mcol" id="matchWoerter"></div></div></div>
+    <div class="done" id="matchDone"><div class="lob">Super! Alle Paare gefunden.</div><button class="btn pri" id="matchNeu">Noch eine Runde</button> <button class="btn" data-go="home">Zurück zum Menü</button></div>
+  </section>
+
+  <!-- Spell -->
+  <section id="spell" hidden>
+    <div class="top"><button class="btn" data-go="home">Menü</button><h2>Spell the word</h2><span class="stand" id="spellStand"></span></div>
+    <p class="hint">Tippe die Buchstaben in der richtigen Reihenfolge.</p>
+    <p class="nospeech nosp" hidden>Auf diesem Gerät gibt es keine Sprachausgabe. Die Aufgabe geht trotzdem.</p>
+    <div class="sbild"><img id="spellBild" alt=""></div>
+    <div class="slots" id="slots"></div>
+    <div class="tl-wrap" id="tl"></div>
+    <div class="sbtns"><button class="btn nosp" id="spellHoer">Hör das Wort</button><button class="btn" id="spellLoesch">Zurück</button></div>
+    <div class="done" id="spellDone"><div class="lob">Well done!</div><button class="btn pri" id="spellNeu">Nächstes Wort</button> <button class="btn" data-go="home">Zurück zum Menü</button></div>
+  </section>
+
+  <!-- Listen -->
+  <section id="listen" hidden>
+    <div class="top"><button class="btn" data-go="home">Menü</button><h2>Listen and guess</h2><span class="stand" id="listenStand"></span></div>
+    <p class="hint">Tippe auf Hören. Dann tippe das Bild, das du gehört hast.</p>
+    <p class="nospeech nosp" hidden>Auf diesem Gerät gibt es keine Sprachausgabe. Frage die Lehrkraft.</p>
+    <div class="center"><button class="btn pri nosp" id="listenHoer">Hören</button></div>
+    <div class="lopts" id="listenOpts"></div>
+    <div class="done" id="listenDone"><div class="lob">Great job!</div><button class="btn pri" id="listenNeu">Noch eine Runde</button> <button class="btn" data-go="home">Zurück zum Menü</button></div>
+  </section>
+
+  <!-- Way -->
+  <section id="way" hidden>
+    <div class="top"><button class="btn" data-go="home">Menü</button><h2>Find the way</h2><span class="stand" id="wayStand"></span></div>
+    <p class="hint">Tippe einen Befehl. Die Figur geht dann einen Schritt. Bring sie zum Ziel.</p>
+    <div class="wwrap">
+      <div class="karte" id="karte"></div>
+      <div class="wside">
+        <div class="auftrag"><img id="wayZielBild" alt=""><div><span>Go to the</span><b id="wayZielWort"></b></div></div>
+        <div class="cmd">
+          <button class="btn" data-cmd="L"><svg viewBox="0 0 60 60"><path d="M6 30 L28 9 L28 23 L47 23 L47 55 L33 55 L33 37 L28 37 L28 51 Z" fill="#4A86D8" stroke="#1F4E96" stroke-width="2" stroke-linejoin="round"/></svg>Turn left</button>
+          <button class="btn" data-cmd="S"><svg viewBox="0 0 60 60"><path d="M30 5 L50 27 H37 V55 H23 V27 H10 Z" fill="#4A86D8" stroke="#1F4E96" stroke-width="2" stroke-linejoin="round"/></svg>Go straight on</button>
+          <button class="btn" data-cmd="R"><svg viewBox="0 0 60 60"><path d="M54 30 L32 9 L32 23 L13 23 L13 55 L27 55 L27 37 L32 37 L32 51 Z" fill="#4A86D8" stroke="#1F4E96" stroke-width="2" stroke-linejoin="round"/></svg>Turn right</button>
+        </div>
+        <button class="btn" id="wayReset">Nochmal von vorn</button>
+      </div>
+    </div>
+    <div class="done" id="wayDone"><div class="lob">Great! You are at the <span id="wayDoneWort"></span>.</div><button class="btn pri" id="wayNeu">Nächstes Ziel</button> <button class="btn" data-go="home">Zurück zum Menü</button></div>
+  </section>
+
+  <!-- Bingo -->
+  <section id="bingo" hidden>
+    <div class="top"><button class="btn" data-go="home">Menü</button><h2>Bingo-Zieher</h2><span class="stand" id="bingoStand"></span></div>
+    <p class="hint">Tippe auf Nächstes Wort. Das Wort wird gesprochen und gezeigt. Kein Wort kommt zweimal.</p>
+    <div class="bcard" id="bingoKarte"><div class="big">Bereit?</div></div>
+    <div class="sbtns"><button class="btn pri" id="bingoNext">Nächstes Wort</button><button class="btn nosp" id="bingoNochmal">Noch einmal sagen</button><button class="btn" id="bingoNeu">Neu mischen</button></div>
+    <div class="gerufen" id="gerufen"></div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var WORDS = [
+    { id: 'bus-stop', en: 'bus stop', de: 'Bushaltestelle' },
+    { id: 'cinema', en: 'cinema', de: 'Kino' },
+    { id: 'park', en: 'park', de: 'Park' },
+    { id: 'school', en: 'school', de: 'Schule' },
+    { id: 'shopping-centre', en: 'shopping centre', de: 'Einkaufszentrum' },
+    { id: 'snack-bar', en: 'snack bar', de: 'Imbiss' },
+    { id: 'sports-centre', en: 'sports centre', de: 'Sportzentrum' },
+    { id: 'supermarket', en: 'supermarket', de: 'Supermarkt' },
+    { id: 'train-station', en: 'train station', de: 'Bahnhof' },
+    { id: 'bus', en: 'bus', de: 'Bus' },
+    { id: 'car', en: 'car', de: 'Auto' },
+    { id: 'town', en: 'town', de: 'Stadt' }
+  ];
+  var byId = {};
+  WORDS.forEach(function (w) { byId[w.id] = w; });
+
+  function $(id) { return document.getElementById(id); }
+  function mischen(a) {
+    var b = a.slice();
+    for (var i = b.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = b[i]; b[i] = b[j]; b[j] = t; }
+    return b;
+  }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) { e.className = cls; } if (text) { e.textContent = text; } return e; }
+  function bildEl(id) { var i = new Image(); i.src = 'img/' + id + '.png'; i.alt = ''; return i; }
+  function wackeln(e) { e.classList.add('falsch'); setTimeout(function () { e.classList.remove('falsch'); }, 400); }
+
+  /* Sprachausgabe */
+  var SPRACH = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
+  var stimme = null;
+  function stimmeWaehlen() {
+    if (!SPRACH) { return; }
+    var vs = window.speechSynthesis.getVoices();
+    for (var i = 0; i < vs.length; i++) { if (/^en[-_]GB/i.test(vs[i].lang)) { stimme = vs[i]; return; } }
+    for (var k = 0; k < vs.length; k++) { if (/^en/i.test(vs[k].lang)) { stimme = vs[k]; return; } }
+  }
+  if (SPRACH) { stimmeWaehlen(); window.speechSynthesis.onvoiceschanged = stimmeWaehlen; }
+  function sprich(text) {
+    if (!SPRACH) { return; }
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-GB'; u.rate = 0.8;
+      if (stimme) { u.voice = stimme; }
+      window.speechSynthesis.speak(u);
+    } catch (e) { /* ohne Ton weiter */ }
+  }
+  if (!SPRACH) {
+    var nos = document.querySelectorAll('.nosp');
+    for (var q = 0; q < nos.length; q++) { if (nos[q].tagName === 'P') { nos[q].hidden = false; } else { nos[q].hidden = true; } }
+    $('menuListen').style.opacity = '.5';
+  }
+
+  /* Navigation */
+  var starter = { match: startMatch, spell: startSpell, listen: startListen, way: startWay, bingo: startBingo };
+  function geheZu(name) {
+    ['home', 'match', 'spell', 'listen', 'way', 'bingo'].forEach(function (s) { $(s).hidden = (s !== name); });
+    window.scrollTo(0, 0);
+    if (starter[name]) { starter[name](); }
+    if (name !== 'spell' && name !== 'listen' && name !== 'bingo') { try { if (SPRACH) { window.speechSynthesis.cancel(); } } catch (e) { /* egal */ } }
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-go]');
+    if (b) { geheZu(b.getAttribute('data-go')); }
+  });
+
+  /* ---------- Match ---------- */
+  var mWahl = null, mGefunden = 0, mAnzahl = 6;
+  function startMatch() {
+    var ids = mischen(WORDS.map(function (w) { return w.id; })).slice(0, mAnzahl);
+    mWahl = null; mGefunden = 0;
+    $('matchDone').classList.remove('zeigen');
+    var b = $('matchBilder'), w = $('matchWoerter');
+    b.innerHTML = ''; w.innerHTML = '';
+    mischen(ids).forEach(function (id) {
+      var t = el('button', 'tile'); t.setAttribute('data-id', id); t.setAttribute('aria-label', 'Bild ' + byId[id].en); t.appendChild(bildEl(id));
+      t.addEventListener('click', function () { mBild(t); }); b.appendChild(t);
+    });
+    mischen(ids).forEach(function (id) {
+      var t = el('button', 'tile', byId[id].en); t.setAttribute('data-id', id);
+      t.addEventListener('click', function () { mWort(t); }); w.appendChild(t);
+    });
+    $('matchStand').textContent = '0 von ' + mAnzahl;
+  }
+  function mBild(t) {
+    var alt = document.querySelector('#matchBilder .tile.sel'); if (alt) { alt.classList.remove('sel'); }
+    t.classList.add('sel'); mWahl = t; sprich(byId[t.getAttribute('data-id')].en);
+  }
+  function mWort(t) {
+    if (!mWahl) { wackeln(t); return; }
+    if (mWahl.getAttribute('data-id') === t.getAttribute('data-id')) {
+      mWahl.classList.remove('sel'); mWahl.classList.add('ok'); t.classList.add('ok'); mWahl = null; mGefunden++;
+      $('matchStand').textContent = mGefunden + ' von ' + mAnzahl;
+      if (mGefunden === mAnzahl) { $('matchDone').classList.add('zeigen'); }
+    } else { wackeln(t); }
+  }
+  $('matchNeu').addEventListener('click', startMatch);
+
+  /* ---------- Spell ---------- */
+  var sWort = null, sPos = 0, sReihe = [], sStack = [], sRunde = 0, sLetzt = null;
+  function startSpell() {
+    var id;
+    do { id = WORDS[Math.floor(Math.random() * WORDS.length)].id; } while (id === sLetzt);
+    sLetzt = id; sWort = byId[id]; sPos = 0; sStack = [];
+    $('spellDone').classList.remove('zeigen');
+    $('spellBild').src = 'img/' + id + '.png';
+    var slots = $('slots'); slots.innerHTML = ''; sReihe = [];
+    var chars = sWort.en.toUpperCase().split(''), buch = [];
+    chars.forEach(function (c) {
+      if (c === ' ') { slots.appendChild(el('div', 'slot leer')); sReihe.push(null); }
+      else { var s = el('div', 'slot'); slots.appendChild(s); sReihe.push(s); buch.push(c); }
+    });
+    var tl = $('tl'); tl.innerHTML = '';
+    mischen(buch).forEach(function (c) {
+      var b = el('button', 'tl', c); b.addEventListener('click', function () { sTipp(b, c); }); tl.appendChild(b);
+    });
+    $('spellStand').textContent = 'Wort ' + (++sRunde);
+    sprich(sWort.en);
+  }
+  function sNaechstesFeld() { while (sPos < sReihe.length && sReihe[sPos] === null) { sPos++; } return sPos; }
+  function sTipp(b, c) {
+    sNaechstesFeld();
+    if (sPos >= sReihe.length) { return; }
+    if (sWort.en.toUpperCase().charAt(sPos) === c) {
+      var s = sReihe[sPos]; s.textContent = c; s.classList.add('voll'); b.classList.add('weg'); sStack.push({ b: b, s: s }); sPos++;
+      sNaechstesFeld();
+      if (sPos >= sReihe.length) {
+        sReihe.forEach(function (x) { if (x) { x.classList.add('ok'); } });
+        $('spellDone').classList.add('zeigen'); sprich(sWort.en);
+      }
+    } else { wackeln(b); }
+  }
+  $('spellLoesch').addEventListener('click', function () {
+    var l = sStack.pop(); if (!l) { return; }
+    l.s.textContent = ''; l.s.classList.remove('voll'); l.b.classList.remove('weg');
+    do { sPos--; } while (sPos > 0 && sReihe[sPos] === null);
+    $('spellDone').classList.remove('zeigen');
+  });
+  $('spellHoer').addEventListener('click', function () { sprich(sWort.en); });
+  $('spellNeu').addEventListener('click', startSpell);
+
+  /* ---------- Listen ---------- */
+  var lZiel = null, lRunde = 0, lRichtig = 0, lMax = 5;
+  function startListen() { lRunde = 0; lRichtig = 0; listenFrage(); }
+  function listenFrage() {
+    lRunde++;
+    $('listenDone').classList.remove('zeigen');
+    var ids = mischen(WORDS.map(function (w) { return w.id; })).slice(0, 4);
+    lZiel = ids[Math.floor(Math.random() * 4)];
+    var o = $('listenOpts'); o.innerHTML = '';
+    ids.forEach(function (id) {
+      var b = el('button', 'opt'); b.appendChild(bildEl(id)); b.setAttribute('aria-label', 'Bild ' + byId[id].en);
+      b.addEventListener('click', function () { lTipp(b, id); }); o.appendChild(b);
+    });
+    $('listenStand').textContent = lRunde + ' von ' + lMax;
+    setTimeout(function () { sprich(byId[lZiel].en); }, 250);
+  }
+  function lTipp(b, id) {
+    if (id === lZiel) {
+      b.classList.add('ok'); sprich(byId[id].en);
+      if (lRunde >= lMax) { setTimeout(function () { $('listenDone').classList.add('zeigen'); }, 600); }
+      else { setTimeout(listenFrage, 1100); }
+    } else { wackeln(b); }
+  }
+  $('listenHoer').addEventListener('click', function () { sprich(byId[lZiel].en); });
+  $('listenNeu').addEventListener('click', startListen);
+
+  /* ---------- Find the way ---------- */
+  /* Gitter 5 x 5, Spalte x, Zeile y. Start unten Mitte, Blick nach oben (0 = hoch, 1 = rechts, 2 = runter, 3 = links). */
+  var ORTE = [
+    { id: 'school', x: 0, y: 0 }, { id: 'shopping-centre', x: 2, y: 0 }, { id: 'train-station', x: 4, y: 0 },
+    { id: 'park', x: 0, y: 2 }, { id: 'cinema', x: 2, y: 2 }, { id: 'sports-centre', x: 4, y: 2 },
+    { id: 'supermarket', x: 4, y: 4 }, { id: 'snack-bar', x: 0, y: 4 }
+  ];
+  var START = { x: 2, y: 4, d: 0 };
+  var DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];
+  var wZiel = null, wPos = null, wSchritte = 0, wLetzt = null, wRot = 0;
+  function pc(n) { return (11 + n * 19.5) + '%'; }
+  function figSVG() {
+    return '<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="#7A4FC4" stroke="#2A1B3D" stroke-width="3"/><path d="M30 10 L46 34 H35 V48 H25 V34 H14 Z" fill="#fff"/></svg>';
+  }
+  function startWay() {
+    var wahl;
+    do { wahl = ORTE[Math.floor(Math.random() * ORTE.length)]; } while (wahl === wLetzt);
+    wLetzt = wahl; wZiel = wahl;
+    var k = $('karte'); k.innerHTML = '';
+    var s = '<svg class="str" viewBox="0 0 100 100" aria-hidden="true">';
+    for (var i = 0; i < 5; i++) {
+      var p = 11 + i * 19.5;
+      s += '<line x1="' + p + '" y1="11" x2="' + p + '" y2="89" stroke="#C9BFB2" stroke-width="7" stroke-linecap="round"/>';
+      s += '<line x1="11" y1="' + p + '" x2="89" y2="' + p + '" stroke="#C9BFB2" stroke-width="7" stroke-linecap="round"/>';
+    }
+    k.insertAdjacentHTML('beforeend', s + '</svg>');
+    var st = el('div', 'start', 'start'); st.style.left = pc(START.x); st.style.top = pc(START.y); k.appendChild(st);
+    ORTE.forEach(function (o) {
+      var d = el('div', 'ort' + (o === wZiel ? ' ziel' : '')); var bi = bildEl(o.id);
+      if (o.id === 'cinema') { bi.style.objectPosition = '50% 80%'; }
+      d.appendChild(bi);
+      d.style.left = pc(o.x); d.style.top = pc(o.y); k.appendChild(d);
+    });
+    var f = el('div', 'fig'); f.id = 'fig'; f.innerHTML = figSVG(); k.appendChild(f);
+    wReset();
+    $('wayZielBild').src = 'img/' + wZiel.id + '.png';
+    $('wayZielWort').textContent = byId[wZiel.id].en;
+    $('wayDone').classList.remove('zeigen');
+  }
+  function wZeichne() {
+    var f = $('fig'); f.style.left = pc(wPos.x); f.style.top = pc(wPos.y);
+    f.firstChild.style.transform = 'rotate(' + wRot + 'deg)';
+    $('wayStand').textContent = wSchritte + ' Schritte';
+  }
+  function wReset() {
+    wPos = { x: START.x, y: START.y, d: START.d }; wSchritte = 0; wRot = 0; wZeichne();
+    $('wayDone').classList.remove('zeigen');
+  }
+  function wBefehl(c, knopf) {
+    if ($('wayDone').classList.contains('zeigen')) { return; }
+    var d = wPos.d, drehung = 0;
+    if (c === 'L') { d = (d + 3) % 4; drehung = -90; } else if (c === 'R') { d = (d + 1) % 4; drehung = 90; }
+    sprich(c === 'L' ? 'Turn left' : c === 'R' ? 'Turn right' : 'Go straight on');
+    var nx = wPos.x + DX[d], ny = wPos.y + DY[d];
+    if (nx < 0 || nx > 4 || ny < 0 || ny > 4) { wackeln(knopf); return; }
+    wRot += drehung; wPos = { x: nx, y: ny, d: d }; wSchritte++; wZeichne();
+    if (nx === wZiel.x && ny === wZiel.y) {
+      $('wayDoneWort').textContent = byId[wZiel.id].en;
+      setTimeout(function () { $('wayDone').classList.add('zeigen'); }, 450);
+    }
+  }
+  document.querySelectorAll('[data-cmd]').forEach(function (b) {
+    b.addEventListener('click', function () { wBefehl(b.getAttribute('data-cmd'), b); });
+  });
+  $('wayReset').addEventListener('click', wReset);
+  $('wayNeu').addEventListener('click', startWay);
+
+  /* ---------- Bingo ---------- */
+  var bStapel = [], bGerufen = [], bLetzt = null;
+  function startBingo() {
+    bStapel = mischen(WORDS.map(function (w) { return w.id; })); bGerufen = []; bLetzt = null;
+    $('bingoKarte').innerHTML = '<div class="big">Bereit?</div>';
+    $('gerufen').innerHTML = ''; $('bingoStand').textContent = '0 von ' + WORDS.length;
+    $('bingoNext').disabled = false;
+  }
+  $('bingoNext').addEventListener('click', function () {
+    if (!bStapel.length) { $('bingoKarte').innerHTML = '<div class="big">Bingo!</div>'; $('bingoNext').disabled = true; return; }
+    var id = bStapel.pop(); bLetzt = id; bGerufen.push(id);
+    var k = $('bingoKarte'); k.innerHTML = '';
+    k.appendChild(bildEl(id)); k.appendChild(el('div', 'big', byId[id].en));
+    $('gerufen').appendChild(el('span', '', byId[id].en));
+    $('bingoStand').textContent = bGerufen.length + ' von ' + WORDS.length;
+    sprich(byId[id].en);
+  });
+  $('bingoNochmal').addEventListener('click', function () { if (bLetzt) { sprich(byId[bLetzt].en); } });
+  $('bingoNeu').addEventListener('click', startBingo);
+
+  /* Direktlinks wie uebung/#way */
+  var h = (location.hash || '').replace('#', '');
+  if (starter[h]) { geheZu(h); }
+})();
+</script>
+</body>
+</html>

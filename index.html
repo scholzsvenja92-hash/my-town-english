@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Town</title>
+<meta name="description" content="Englisch in Klasse 7: My town. Ablauf, Material, Übungen und Lösungen auf einer Seite.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="uebung/img/favicon.png">
+<link rel="apple-touch-icon" href="uebung/img/apple-touch-icon.png">
+<style>
+  :root { --ink:#2A1B3D; --muted:#6B6478; --line:#DDD3C7; --bg:#FFF8EE; --paper:#fff; --orange:#EE7D1C; --lila:#7A4FC4; --gruen:#3E8E6B; }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:Verdana, Arial, Helvetica, sans-serif; line-height:1.65; font-size:17px; }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 20px; }
+  .head { padding:36px 0 24px; display:grid; grid-template-columns:1fr minmax(0,330px); gap:26px; align-items:center; }
+  .chip { display:inline-block; font-size:12px; font-weight:bold; letter-spacing:.08em; text-transform:uppercase; border:2px solid var(--orange); color:#B8560A; border-radius:999px; padding:3px 14px; background:#fff; }
+  h1 { font-family:"Arial Black","Helvetica Neue",Arial,sans-serif; font-weight:900; font-size:clamp(40px,8vw,72px); line-height:1.02; margin:16px 0 10px; letter-spacing:-0.02em; }
+  .lead { max-width:600px; color:var(--muted); margin:0; }
+  .head img { width:100%; height:auto; display:block; }
+  .tabbar { position:sticky; top:0; z-index:20; background:linear-gradient(var(--bg) 70%, rgba(255,248,238,0)); padding-top:10px; }
+  .tabs { display:flex; gap:6px; align-items:flex-end; margin-bottom:-2px; position:relative; z-index:2; }
+  .tab { font:inherit; font-weight:bold; font-size:16px; cursor:pointer; color:var(--ink); border:2px solid var(--ink); border-radius:16px 16px 0 0; background:var(--tint); padding:13px 22px 11px; min-height:52px; position:relative; transition:transform .15s ease; }
+  .tab:hover { transform:translateY(-3px); }
+  .tab[aria-selected=true] { background:var(--paper); border-bottom-color:var(--paper); padding-top:17px; }
+  .tab[aria-selected=true]::before { content:""; position:absolute; left:14px; right:14px; top:6px; height:5px; border-radius:3px; background:var(--c); }
+  .tab:focus-visible, .btn:focus-visible, .mchip:focus-visible, .filter:focus-visible, .ulink:focus-visible { outline:3px solid var(--c, var(--ink)); outline-offset:3px; }
+  .t1 { --c:var(--orange); --tint:#FDE7CF; }
+  .t2 { --c:var(--lila);   --tint:#E9E0F7; }
+  .t3 { --c:var(--gruen);  --tint:#DDEFE5; }
+  .t4 { --c:var(--ink);    --tint:#E8E3EE; }
+  .panel { background:var(--paper); border:2px solid var(--ink); border-radius:0 22px 22px 22px; padding:34px 30px 38px; margin-bottom:46px; min-height:340px; }
+  .panel[hidden] { display:none; }
+  .panel h2 { font-family:"Arial Black","Helvetica Neue",Arial,sans-serif; font-size:28px; line-height:1.15; margin:0 0 6px; }
+  .panel .intro { color:var(--muted); margin:0 0 24px; max-width:640px; }
+  .phasen { list-style:none; margin:0; padding:0; display:grid; gap:14px; }
+  .phase { display:grid; grid-template-columns:124px 1fr; gap:20px; border:2px solid var(--ink); border-radius:18px; padding:18px 22px; }
+  .zeit { white-space:nowrap; font-family:"Arial Black",Arial,sans-serif; font-size:20px; line-height:1.1; color:var(--orange); }
+  .zeit small { display:block; font-family:Verdana,Arial,sans-serif; font-weight:normal; font-size:13px; color:var(--muted); margin-top:3px; }
+  .phase h3 { margin:0 0 4px; font-size:19px; }
+  .phase p { margin:0; }
+  .kern { font-size:11px; font-weight:bold; letter-spacing:.06em; text-transform:uppercase; background:var(--orange); color:#fff; border-radius:999px; padding:2px 10px; margin-left:8px; vertical-align:2px; }
+  .kern.zus { background:#fff; color:var(--muted); border:1.5px solid var(--muted); padding:0 9px; }
+  .brauchst { margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:14px; }
+  .brauchst > span { color:var(--muted); }
+  .mchip { display:inline-block; text-decoration:none; color:var(--ink); font-weight:bold; font-size:14px; border:2px solid var(--ink); border-radius:999px; padding:5px 14px; background:var(--paper); }
+  .mchip:hover { background:var(--ink); color:#fff; }
+  .filters { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 22px; }
+  .filter { font:inherit; font-size:15px; font-weight:bold; cursor:pointer; border:2px solid var(--ink); background:var(--paper); border-radius:999px; padding:8px 18px; min-height:44px; }
+  .filter[aria-pressed=true] { background:var(--ink); color:#fff; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:22px; }
+  .card { border:2px solid var(--ink); border-radius:18px; overflow:hidden; background:var(--paper); display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .15s ease; }
+  .card:hover { transform:translate(-3px,-3px); box-shadow:6px 6px 0 var(--c); }
+  .card[hidden] { display:none; }
+  .thumb { background:#F4EEE3; border-bottom:2px solid var(--ink); aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; padding:14px; }
+  .thumb img { max-width:100%; max-height:100%; display:block; border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.15); background:#fff; }
+  .card .body { padding:16px 18px 18px; display:flex; flex-direction:column; gap:4px; flex:1; }
+  .badge { align-self:flex-start; font-size:12px; font-weight:bold; color:#fff; background:var(--c); border-radius:999px; padding:2px 12px; }
+  .card h3 { margin:6px 0 0; font-size:19px; }
+  .card p { margin:0; font-size:15px; color:var(--muted); line-height:1.5; }
+  .card p.druck { color:var(--ink); font-weight:bold; font-size:14px; margin-top:6px; }
+  .btns { display:flex; gap:10px; margin-top:auto; padding-top:14px; flex-wrap:wrap; }
+  .btn { text-decoration:none; font-weight:bold; font-size:15px; color:#fff; background:var(--ink); border:2px solid var(--ink); border-radius:12px; padding:10px 18px; min-height:46px; display:inline-flex; align-items:center; }
+  .btn.ghost { background:var(--paper); color:var(--ink); }
+  .btn:hover { transform:translateY(-2px); }
+  .zipbar { margin-top:26px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; border:2px dashed var(--ink); border-radius:18px; padding:18px 22px; }
+  .zipbar p { margin:0; flex:1; min-width:220px; }
+  .ppt { display:grid; grid-template-columns:minmax(0,340px) 1fr; gap:26px; align-items:center; border:2px solid var(--ink); border-radius:18px; padding:20px; margin-bottom:26px; background:#FFF8EE; }
+  .ppt img { width:100%; height:auto; display:block; border:2px solid var(--ink); border-radius:12px; }
+  .ppt h3 { margin:0 0 6px; font-size:22px; }
+  .ppt p { margin:0 0 14px; color:var(--muted); }
+  .uwrap { display:grid; grid-template-columns:minmax(0,260px) 1fr; gap:28px; align-items:start; }
+  .uwrap .qr { border:2px solid var(--ink); border-radius:18px; padding:14px; text-align:center; background:#fff; }
+  .uwrap .qr img { width:100%; height:auto; display:block; }
+  .uwrap .qr span { display:block; font-size:13px; color:var(--muted); margin-top:6px; word-break:break-all; }
+  .ulinks { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+  .ulink { display:block; text-decoration:none; color:var(--ink); border:2px solid var(--ink); border-radius:16px; padding:16px 18px; background:#DDEFE5; min-height:84px; }
+  .ulink:nth-child(even) { background:#E9E0F7; }
+  .ulink b { display:block; font-size:18px; }
+  .ulink span { font-size:14px; color:var(--muted); }
+  .ulink:hover { transform:translateY(-3px); }
+  .hinweise { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin-top:28px; }
+  .hint { border:2px solid var(--ink); border-radius:18px; padding:18px 22px; }
+  .hint h3 { margin:0 0 6px; font-size:17px; }
+  .hint ul { margin:0; padding-left:20px; }
+  .hint li { margin-bottom:6px; }
+  table.loes { border-collapse:collapse; width:100%; margin-top:10px; font-size:15px; }
+  table.loes th, table.loes td { border:2px solid var(--ink); padding:8px 12px; text-align:left; vertical-align:top; }
+  table.loes th { background:#FDE7CF; }
+  footer { color:var(--muted); font-size:13px; padding:0 0 46px; max-width:760px; }
+  @media (max-width:760px) {
+    body { font-size:16px; }
+    .head { grid-template-columns:1fr; }
+    .head img { max-width:360px; }
+    .tab { padding:12px 10px 10px; font-size:14px; flex:1; }
+    .panel { padding:24px 18px 30px; border-radius:0 18px 18px 18px; }
+    .phase { grid-template-columns:1fr; gap:6px; }
+    .ppt, .uwrap { grid-template-columns:1fr; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    html { scroll-behavior:auto; }
+    .tab, .card, .btn, .ulink { transition:none; }
+    .tab:hover, .btn:hover, .card:hover, .ulink:hover { transform:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div>
+      <span class="chip">Englisch · Klasse 7 · Förderzentrum</span>
+      <h1>My Town</h1>
+      <p class="lead">Orte in der Stadt und Wege beschreiben: sprechen, spielen, schreiben. Ablauf, Material, Übungen und Lösungen liegen auf dieser einen Seite.</p>
+    </div>
+    <img src="titel.png" alt="Stadtkarte aus dem Buch">
+  </header>
+
+  <div class="tabbar">
+    <div class="tabs" role="tablist" aria-label="Bereiche">
+      <button class="tab t1" role="tab" id="tab-ablauf" aria-controls="ablauf" aria-selected="true">Ablauf</button>
+      <button class="tab t2" role="tab" id="tab-material" aria-controls="material" aria-selected="false">Material</button>
+      <button class="tab t3" role="tab" id="tab-uebung" aria-controls="uebung" aria-selected="false">Üben</button>
+      <button class="tab t4" role="tab" id="tab-lehrkraft" aria-controls="lehrkraft" aria-selected="false">Lehrkraft</button>
+    </div>
+  </div>
+
+  <section class="panel" id="ablauf" role="tabpanel" aria-labelledby="tab-ablauf">
+    <h2>Der Ablauf in 90 Minuten</h2>
+    <p class="intro">Von oben nach unten durchgehen. Für 45 Minuten reichen die Phasen mit "Kern". Bei jeder Phase steht, was du brauchst.</p>
+    <ol class="phasen">
+      <li class="phase"><div class="zeit">0 bis 8<small>Min.</small></div><div><h3>Warm-up <span class="kern">Kern</span></h3><p>Partnergespräch zu den Fotos und zur Karte: "I can see a bike." Dazu die Autos zählen.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="material/MyTown-Words.pptx" download>PowerPoint, Folie 2 und 3</a></div></div></li>
+      <li class="phase"><div class="zeit">8 bis 22<small>Min.</small></div><div><h3>Wörter einführen <span class="kern">Kern</span></h3><p>Zwölf Bildfolien. Vorsprechen, nachsprechen, einzeln sprechen.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="material/MyTown-Words.pptx" download>PowerPoint, Folie 4 bis 15</a></div></div></li>
+      <li class="phase"><div class="zeit">22 bis 30<small>Min.</small></div><div><h3>Which way? <span class="kern">Kern</span></h3><p>Go straight on, Turn left, Turn right. Erst mit dem Körper, dann nachsprechen.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="material/MyTown-Words.pptx" download>PowerPoint, Folie 16 und 17</a></div></div></li>
+      <li class="phase"><div class="zeit">30 bis 36<small>Min.</small></div><div><h3>What's missing? <span class="kern">Kern</span></h3><p>Drei Runden: Ein Bild fehlt, die Kinder sagen das Wort.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="material/MyTown-Words.pptx" download>PowerPoint, Folie 18 bis 20</a></div></div></li>
+      <li class="phase"><div class="zeit">36 bis 42<small>Min.</small></div><div><h3>Spell und Listen <span class="kern zus">Zusatz</span></h3><p>Wort buchstabieren, Rätsel raten.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="material/MyTown-Words.pptx" download>PowerPoint, Folie 21 und 22</a></div></div></li>
+      <li class="phase"><div class="zeit">42 bis 56<small>Min.</small></div><div><h3>Hefteintrag <span class="kern">Kern</span></h3><p>Richtungen und Fragewörter abschreiben. Als Vorlage zum Abschreiben oder als Blatt mit Lücken.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="material/MyTown-Words.pptx" download>PowerPoint, Folie 25</a><a class="mchip" href="material/hefteintrag-vorlage.pdf" target="_blank" rel="noopener">Hefteintrag Vorlage</a><a class="mchip" href="material/hefteintrag-luecken.pdf" target="_blank" rel="noopener">Hefteintrag mit Lücken</a></div></div></li>
+      <li class="phase"><div class="zeit">56 bis 66<small>Min.</small></div><div><h3>Übungen am iPad <span class="kern zus">Zusatz</span></h3><p>QR-Code scannen, Aufgaben nacheinander machen.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="uebung/" target="_blank" rel="noopener">Übungsseite öffnen</a></div></div></li>
+      <li class="phase"><div class="zeit">66 bis 78<small>Min.</small></div><div><h3>Wege erfragen und beschreiben <span class="kern">Kern</span></h3><p>"Where's the school?" und "Excuse me, please." zu zweit sprechen, danach das Arbeitsblatt.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="material/MyTown-Words.pptx" download>PowerPoint, Folie 23 und 24</a><a class="mchip" href="material/arbeitsblatt-find-the-way.pdf" target="_blank" rel="noopener">Arbeitsblatt Find the way</a></div></div></li>
+      <li class="phase"><div class="zeit">78 bis 90<small>Min.</small></div><div><h3>Vokabelliste und Abschluss <span class="kern">Kern</span></h3><p>Wörter aufschreiben, dann Reflecting mit Daumen.</p><div class="brauchst"><span>Du brauchst jetzt:</span><a class="mchip" href="material/vokabelliste-leicht.pdf" target="_blank" rel="noopener">Vokabelliste leicht</a><a class="mchip" href="material/vokabelliste-normal.pdf" target="_blank" rel="noopener">Vokabelliste normal</a><a class="mchip" href="material/MyTown-Words.pptx" download>PowerPoint, Folie 26</a></div></div></li>
+    </ol>
+  </section>
+
+  <section class="panel" id="material" role="tabpanel" aria-labelledby="tab-material" hidden>
+    <h2>Material</h2>
+    <p class="intro">Die PowerPoint zum Durchklicken und alle Blätter zum Ausdrucken. Mit "Ansehen" öffnet sich das PDF im Browser, mit "PDF laden" speicherst du es.</p>
+    <div class="ppt">
+      <img src="material/vorschau/MyTown-Words.jpg" alt="Titelfolie der PowerPoint">
+      <div>
+        <h3>PowerPoint My Town</h3>
+        <p>26 Folien: Warm-up, 12 Wörter mit Bildern aus dem Buch, Richtungen, What's missing, Spell, Listen and guess, Wege erfragen, Hefteintrag, Reflecting. Notizen stehen in jeder Folie.</p>
+        <a class="btn" href="material/MyTown-Words.pptx" download>PowerPoint laden</a>
+      </div>
+    </div>
+    <div class="filters" role="group" aria-label="Filter">
+      <button class="filter" aria-pressed="true" data-filter="alle">Alles</button>
+      <button class="filter" aria-pressed="false" data-filter="Hefteintrag">Hefteintrag</button>
+      <button class="filter" aria-pressed="false" data-filter="Wörter">Wörter</button>
+      <button class="filter" aria-pressed="false" data-filter="Üben">Üben</button>
+    </div>
+    <div class="grid" id="cards">
+      <article class="card" data-gruppe="Hefteintrag" style="--c:#EE7D1C">
+        <div class="thumb"><img src="material/vorschau/hefteintrag-vorlage.jpg" alt="Vorschau Hefteintrag Vorlage" loading="lazy"></div>
+        <div class="body"><span class="badge">A4, 1 Seite, auf Heftlinien</span><h3>Hefteintrag zum Abschreiben</h3><p>Richtungen und Fragewörter, fertig geschrieben. Die Kinder schreiben ihn ins Heft.</p><p class="druck">Druck: je Kind 1</p>
+        <div class="btns"><a class="btn ghost" href="material/hefteintrag-vorlage.html" target="_blank" rel="noopener">Ansehen</a><a class="btn" href="material/hefteintrag-vorlage.pdf" download>PDF laden</a></div></div>
+      </article>
+      <article class="card" data-gruppe="Hefteintrag" style="--c:#EE7D1C">
+        <div class="thumb"><img src="material/vorschau/hefteintrag-luecken.jpg" alt="Vorschau Hefteintrag mit Lücken" loading="lazy"></div>
+        <div class="body"><span class="badge">A4, 1 Seite, auf Heftlinien</span><h3>Hefteintrag mit Lücken</h3><p>Gleicher Inhalt, die Schlüsselwörter fehlen. Wörterbox und Pfeile helfen.</p><p class="druck">Druck: je Kind 1</p>
+        <div class="btns"><a class="btn ghost" href="material/hefteintrag-luecken.html" target="_blank" rel="noopener">Ansehen</a><a class="btn" href="material/hefteintrag-luecken.pdf" download>PDF laden</a></div></div>
+      </article>
+      <article class="card" data-gruppe="Wörter" style="--c:#7A4FC4">
+        <div class="thumb"><img src="material/vorschau/vokabelliste-leicht.jpg" alt="Vorschau Vokabelliste leicht" loading="lazy"></div>
+        <div class="body"><span class="badge">A4, 1 Seite</span><h3>Vokabelliste leicht</h3><p>Zwölf Bilder mit Wort. Die Kinder schreiben jedes Wort noch einmal.</p><p class="druck">Druck: je Kind 1</p>
+        <div class="btns"><a class="btn ghost" href="material/vokabelliste-leicht.html" target="_blank" rel="noopener">Ansehen</a><a class="btn" href="material/vokabelliste-leicht.pdf" download>PDF laden</a></div></div>
+      </article>
+      <article class="card" data-gruppe="Wörter" style="--c:#7A4FC4">
+        <div class="thumb"><img src="material/vorschau/vokabelliste-normal.jpg" alt="Vorschau Vokabelliste normal" loading="lazy"></div>
+        <div class="body"><span class="badge">A4, 1 Seite</span><h3>Vokabelliste normal</h3><p>Bild und deutsches Wort. Die Kinder schreiben das englische Wort selbst, mit Wörterbox.</p><p class="druck">Druck: je Kind 1</p>
+        <div class="btns"><a class="btn ghost" href="material/vokabelliste-normal.html" target="_blank" rel="noopener">Ansehen</a><a class="btn" href="material/vokabelliste-normal.pdf" download>PDF laden</a></div></div>
+      </article>
+      <article class="card" data-gruppe="Üben" style="--c:#3E8E6B">
+        <div class="thumb"><img src="material/vorschau/arbeitsblatt-find-the-way.jpg" alt="Vorschau Arbeitsblatt Find the way" loading="lazy"></div>
+        <div class="body"><span class="badge">A4, 2 Seiten</span><h3>Arbeitsblatt Find the way</h3><p>Karte lesen, Pfeile zuordnen, Sätze ergänzen, eigene Wegbeschreibung schreiben.</p><p class="druck">Druck: je Kind 1</p>
+        <div class="btns"><a class="btn ghost" href="material/arbeitsblatt-find-the-way.html" target="_blank" rel="noopener">Ansehen</a><a class="btn" href="material/arbeitsblatt-find-the-way.pdf" download>PDF laden</a></div></div>
+      </article>
+    </div>
+    <div class="zipbar">
+      <p><b>Alles auf einmal:</b> PowerPoint und alle PDFs in einer ZIP-Datei.</p>
+      <a class="btn" href="material/mytown-alles.zip" download>ZIP laden</a>
+    </div>
+  </section>
+
+  <section class="panel" id="uebung" role="tabpanel" aria-labelledby="tab-uebung" hidden>
+    <h2>Üben am iPad oder Handy</h2>
+    <p class="intro">Fünf Übungen, alle zum Tippen. Die Kinder können nichts falsch machen, sie probieren einfach noch einmal. Der Ton kommt vom Gerät, bitte die Lautstärke prüfen.</p>
+    <div class="uwrap">
+      <div class="qr"><img src="qr-uebung.png" alt="QR-Code zur Übungsseite"><span>Mit der Kamera scannen</span></div>
+      <div class="ulinks">
+        <a class="ulink" href="uebung/#match" target="_blank" rel="noopener"><b>Match the pairs</b><span>Bild und Wort verbinden</span></a>
+        <a class="ulink" href="uebung/#spell" target="_blank" rel="noopener"><b>Spell the word</b><span>Buchstaben in die richtige Reihenfolge tippen</span></a>
+        <a class="ulink" href="uebung/#listen" target="_blank" rel="noopener"><b>Listen and guess</b><span>Wort hören, Bild tippen</span></a>
+        <a class="ulink" href="uebung/#way" target="_blank" rel="noopener"><b>Find the way</b><span>Figur mit Go straight on, Turn left, Turn right zum Ziel führen</span></a>
+        <a class="ulink" href="uebung/#bingo" target="_blank" rel="noopener"><b>Bingo-Zieher</b><span>Für die Lehrkraft: Wort ziehen, sprechen, zeigen</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel lehr" id="lehrkraft" role="tabpanel" aria-labelledby="tab-lehrkraft" hidden>
+    <h2>Für dich als Lehrkraft</h2>
+    <p class="intro">Wortschatz, Lösungen und Hinweise. Der Wortschatz kommt von Buchseite 1 (important words), die Bilder stammen aus der Stadtkarte auf Seite 12 und 13.</p>
+    <div class="hinweise">
+      <div class="hint"><h3>Vorbereitung</h3><ul>
+        <li>PowerPoint öffnen und die Notizen lesen.</li>
+        <li>Hefteintrag und Vokabelliste je Kind ausdrucken (Seitenverhältnis A4, ohne Skalierung).</li>
+        <li>iPads laden, QR-Code zeigen, Ton testen.</li>
+        <li>Zusatz Folien 21 und 22 nur bei Zeit.</li>
+      </ul></div>
+      <div class="hint"><h3>Differenzierung</h3><ul>
+        <li>Hefteintrag zum Abschreiben für alle, die Schreibzeit brauchen.</li>
+        <li>Hefteintrag mit Lücken und Wörterbox für sichere Schreiber.</li>
+        <li>Vokabelliste leicht: Wörter nachschreiben. Normal: selbst schreiben mit deutscher Hilfe.</li>
+        <li>Find the way am iPad: ohne Zeitdruck, beliebig viele Schritte.</li>
+      </ul></div>
+      <div class="hint"><h3>Zeit knapp?</h3><ul>
+        <li>Nur "Kern": Folien 1 bis 17 und 23, Hefteintrag, Vokabelliste.</li>
+        <li>Zusatz streichen: Spell, Listen, iPad. Sie lassen sich als Hausaufgabe oder in der nächsten Stunde nachholen.</li>
+      </ul></div>
+      <div class="hint"><h3>Bilder</h3><ul>
+        <li>Alle Bilder sind Ausschnitte aus dem Schulbuch. Nur für den eigenen Unterricht nutzen, diese Seite nicht öffentlich weitergeben.</li>
+        <li>Die Beschriftungen auf der Karte sind in den Wortbildern entfernt, sonst wäre Rätseln leicht.</li>
+      </ul></div>
+    </div>
+    <h3 style="margin-top:30px">Lösungen</h3>
+    <table class="loes">
+      <tr><th>Material</th><th>Lösung</th></tr>
+      <tr><td>What's missing? Runde 1, 2, 3</td><td>park, car, train station</td></tr>
+      <tr><td>Listen and guess (Folie 22)</td><td>bus</td></tr>
+      <tr><td>Arbeitsblatt Aufgabe 1</td><td>school: School Road. cinema: Park Street. supermarket: King's Road. sports centre: Main Street. train station: Bedford Street.</td></tr>
+      <tr><td>Arbeitsblatt Aufgabe 2 (Pfeile verbinden)</td><td>Pfeil nach links: Turn left. Pfeil nach oben: Go straight on. Pfeil nach rechts: Turn right.</td></tr>
+      <tr><td>Arbeitsblatt Aufgabe 3</td><td>Go straight on. Turn left onto Park Street. Turn right onto Main Road.</td></tr>
+      <tr><td>Arbeitsblatt Aufgabe 4</td><td>Individuell. Beispiel: Go straight on. Turn left onto Park Street. Then there's the cinema.</td></tr>
+      <tr><td>Hefteintrag mit Lücken</td><td>straight on, left, right. Fragewörter: How, Where, When.</td></tr>
+    </table>
+    <h3 style="margin-top:30px">Wortschatz</h3>
+    <table class="loes">
+      <tr><th>English</th><th>Deutsch</th></tr>
+      <tr><td>bus stop · cinema · park · school</td><td>Bushaltestelle · Kino · Park · Schule</td></tr>
+      <tr><td>shopping centre · snack bar · sports centre</td><td>Einkaufszentrum · Imbiss · Sportzentrum</td></tr>
+      <tr><td>supermarket · train station · bus · car · town</td><td>Supermarkt · Bahnhof · Bus · Auto · Stadt</td></tr>
+      <tr><td>Go straight on. Turn left. Turn right.</td><td>Geh geradeaus. Biege links ab. Biege rechts ab.</td></tr>
+    </table>
+  </section>
+
+  <footer>Alle Wortbilder sind Ausschnitte aus dem Schulbuch, nur für den eigenen Unterricht. Aufbau der Seite angelehnt an Halloween Words.</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  function zeige(tab) {
+    tabs.forEach(function (t) {
+      var an = (t === tab);
+      t.setAttribute('aria-selected', an ? 'true' : 'false');
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !an;
+    });
+    try { history.replaceState(null, '', '#' + tab.id.replace('tab-', '')); } catch (e) { /* egal */ }
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { zeige(t); });
+    t.addEventListener('keydown', function (e) {
+      var k = e.key, n = null;
+      if (k === 'ArrowRight') { n = tabs[(i + 1) % tabs.length]; }
+      if (k === 'ArrowLeft') { n = tabs[(i + tabs.length - 1) % tabs.length]; }
+      if (n) { n.focus(); zeige(n); e.preventDefault(); }
+    });
+  });
+  var h = (location.hash || '').replace('#', '');
+  var start = document.getElementById('tab-' + h);
+  if (start) { zeige(start); }
+
+  var filter = document.querySelectorAll('.filter');
+  Array.prototype.forEach.call(filter, function (f) {
+    f.addEventListener('click', function () {
+      Array.prototype.forEach.call(filter, function (x) { x.setAttribute('aria-pressed', x === f ? 'true' : 'false'); });
+      var w = f.getAttribute('data-filter');
+      Array.prototype.forEach.call(document.querySelectorAll('#cards .card'), function (c) {
+        c.hidden = !(w === 'alle' || c.getAttribute('data-gruppe') === w);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
